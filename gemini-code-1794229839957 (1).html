@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הבלוג של אלון | חטיבת אלון</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #0f111a;
+      --card-bg: rgba(26, 31, 52, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary-purple: #8a2be2;
+      --accent-neon: #00f2fe;
+      --accent-pink: #ff007f;
+      --text-main: #f0f2f5;
+      --text-muted: #a0aec0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Rubik', sans-serif; }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.25) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 0, 127, 0.2) 0%, transparent 40%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 50px;
+    }
+
+    header {
+      background: rgba(15, 17, 26, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .header-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+
+    .live-badge {
+      background: var(--accent-pink);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .logo-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #fff, var(--accent-neon));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-subtitle { font-size: 0.85rem; color: var(--text-muted); }
+
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+
+    .school-link-btn {
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: var(--accent-neon);
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-trigger-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .main-layout {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 30px;
+    }
+
+    @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
+
+    .categories-bar { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 8px; }
+
+    .cat-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .cat-chip.active {
+      background: linear-gradient(45deg, var(--primary-purple), var(--accent-pink));
+      color: white;
+      border-color: transparent;
+    }
+
+    .post-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      backdrop-filter: blur(10px);
+    }
+
+    .post-card img { width: 100%; max-height: 380px; object-fit: cover; }
+    .post-content { padding: 22px; }
+
+    .post-badge {
+      background: rgba(138, 43, 226, 0.3);
+      color: var(--accent-neon);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .post-title { font-size: 1.4rem; font-weight: 800; margin: 10px 0; color: white; }
+    .post-text { font-size: 0.98rem; color: #d1d5db; line-height: 1.6; margin-bottom: 18px; white-space: pre-line; }
+
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 15px;
+    }
+
+    .delete-btn-footer {
+      background: rgba(255, 77, 77, 0.15);
+      color: #ff4d4d;
+      border: 1px solid rgba(255, 77, 77, 0.3);
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .sidebar-widget {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .widget-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      border-bottom: 2px solid var(--primary-purple);
+      padding-bottom: 8px;
+    }
+
+    .poll-option {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .poll-option:hover { background: rgba(255, 255, 255, 0.08); }
+
+    .poll-bar {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      background: rgba(138, 43, 226, 0.35);
+      z-index: 1;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .poll-text {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .anon-box input, .anon-box textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(45deg, var(--primary-purple), var(--accent-pink));
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: #151824;
+      border: 1px solid var(--card-border);
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 16px;
+      padding: 25px;
+      position: relative;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 15px; left: 15px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px;
+      color: white;
+    }
+
+    .inbox-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .inbox-msg { font-size: 0.95rem; margin: 8px 0; white-space: pre-line; }
+    .reply-area textarea {
+      width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--card-border);
+      border-radius: 6px; padding: 8px; color: white; height: 60px; margin-bottom: 6px;
+    }
+    .reply-btn {
+      background: var(--accent-neon); color: black; border: none; padding: 6px 14px;
+      border-radius: 6px; font-weight: 700; cursor: pointer; float: left;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="live-badge">LIVE</span>
+        <div>
+          <div class="logo-title">הבלוג של אלון</div>
+          <div class="logo-subtitle">מועצת התלמידים | חטיבת אלון</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="https://alonraanana.tik-tak.net/" target="_blank" class="school-link-btn">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>אתר חטיבת אלון</span>
+        </a>
+        <button class="admin-trigger-btn" onclick="handleAdminClick()">
+          <i class="fa-solid fa-user-shield"></i>
+          <span id="adminBtnText">כניסת מועצה</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <main>
+      <div class="categories-bar">
+        <button class="cat-chip active" onclick="filterCategory('הכל')">הכל</button>
+        <button class="cat-chip" onclick="filterCategory('תזכורות')">📌 תזכורות</button>
+        <button class="cat-chip" onclick="filterCategory('מאחורי הקלעים')">🎬 מאחורי הקלעים</button>
+        <button class="cat-chip" onclick="filterCategory('שאלון השבוע')">🎤 שאלון השבוע</button>
+        <button class="cat-chip" onclick="filterCategory('מכתבים ותשובות')">✉️ מכתבים ותשובות</button>
+      </div>
+
+      <div id="postsContainer"></div>
+    </main>
+
+    <aside>
+      <div class="sidebar-widget">
+        <div class="widget-title">
+          <i class="fa-solid fa-square-poll-vertical"></i>
+          <span id="pollQuestionDisplay">הסקר השבועי</span>
+        </div>
+        <div id="pollOptionsContainer"></div>
+      </div>
+
+      <div class="sidebar-widget anon-box">
+        <div class="widget-title">
+          <i class="fa-solid fa-paper-plane"></i>
+          תיבת מכתבים אנונימית
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+          יש לכם שאלה למועצה? רעיון להפסקה פעילה? ספרו לנו אנונימית ונשיב כאן בבלוג!
+        </p>
+        <form onsubmit="submitAnonLetter(event)">
+          <input type="text" id="anonTopic" placeholder="נושא המכתב..." required>
+          <textarea id="anonMessage" placeholder="מה בא לכם לשתף או לשאול?..." required></textarea>
+          <button type="submit" class="submit-btn">שלח למועצה</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-card" style="max-width: 380px; text-align: center;">
+      <button class="close-modal-btn" onclick="closeModal('loginModal')">&times;</button>
+      <h3 style="margin-bottom: 15px;">כניסת מועצת התלמידים</h3>
+      <div class="form-group">
+        <input type="password" id="adminPasswordInput" placeholder="הכנס סיסמה...">
+      </div>
+      <button class="submit-btn" onclick="verifyPassword()">התחבר</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="adminPanelModal">
+    <div class="modal-card">
+      <button class="close-modal-btn" onclick="closeModal('adminPanelModal')">&times;</button>
+      <h2 style="margin-bottom: 20px; color: var(--accent-neon);">פאנל ניהול הבלוג</h2>
+      
+      <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; overflow-x: auto;">
+        <button class="cat-chip active" id="tabBtnPost" onclick="switchAdminTab('newPost')">פוסט חדש</button>
+        <button class="cat-chip" id="tabBtnInbox" onclick="switchAdminTab('inbox')">דואר אנונימי (<span id="inboxCount">0</span>)</button>
+        <button class="cat-chip" id="tabBtnPoll" onclick="switchAdminTab('editPoll')">עריכת סקר</button>
+      </div>
+
+      <div id="tabNewPost">
+        <form onsubmit="createPost(event)">
+          <div class="form-group">
+            <label>כותרת הפוסט</label>
+            <input type="text" id="newTitle" required>
+          </div>
+          <div class="form-group">
+            <label>קטגוריה</label>
+            <select id="newCategory">
+              <option value="תזכורות">📌 תזכורות</option>
+              <option value="מאחורי הקלעים">🎬 מאחורי הקלעים</option>
+              <option value="שאלון השבוע">🎤 שאלון השבוע</option>
+              <option value="מכתבים ותשובות">✉️ מכתבים ותשובות</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>קישור לתמונה (אופציונלי)</label>
+            <input type="url" id="newImg" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>תוכן הפוסט</label>
+            <textarea id="newContent" style="height: 120px;" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">פרסם פוסט</button>
+        </form>
+      </div>
+
+      <div id="tabInbox" style="display: none;">
+        <div id="inboxList"></div>
+      </div>
+
+      <div id="tabEditPoll" style="display: none;">
+        <form onsubmit="savePollConfig(event)">
+          <div class="form-group">
+            <label>שאלת הסקר החדשה</label>
+            <input type="text" id="pollQuestionInput" required>
+          </div>
+          <div class="form-group">
+            <label>אפשרות 1</label>
+            <input type="text" id="pollOpt1" required>
+          </div>
+          <div class="form-group">
+            <label>אפשרות 2</label>
+            <input type="text" id="pollOpt2" required>
+          </div>
+          <div class="form-group">
+            <label>אפשרות 3 (אופציונלי)</label>
+            <input type="text" id="pollOpt3">
+          </div>
+          <button type="submit" class="submit-btn">עדכן סקר</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // קישור מנוהל שמונע שמירת מטמון ישן
+    const BIN_URL = 'https://api.jsonbin.io/v3/b/672f7787ad19ca34f8c75d4a';
+    const BIN_KEY = '$2a$10$78K7z/Fw.7gT.F2lW6.o7O';
+
+    let state = {
+      isAdmin: false,
+      currentCategory: 'הכל',
+      posts: [],
+      inbox: [],
+      poll: {
+        question: "איזה אירוע תרצו בהפסקה הפעילה ביום חמישי?",
+        options: [
+          { text: "טורניר ספורט שכבתי", votes: 0 },
+          { text: "עמדת DJ ומוזיקה בחצר", votes: 0 },
+          { text: "פינת משחקי קופסה וקונסולות", votes: 0 }
+        ],
+        voted: false
+      }
+    };
+
+    async function loadData() {
+      try {
+        // הוספת חותמת זמן למניעת שמירת מטמון (Cache Busting) כדי שכולם יראו מיד את העדכונים
+        const res = await fetch(BIN_URL + '/latest?t=' + new Date().getTime(), {
+          headers: { 'X-Master-Key': BIN_KEY }
+        });
+        const data = await res.json();
+        if (data && data.record && data.record.posts) {
+          state.posts = data.record.posts;
+          state.inbox = data.record.inbox || [];
+          if (data.record.poll) state.poll = data.record.poll;
+        }
+      } catch (e) {
+        console.log('שגיאת טעינה');
+      }
+      renderPosts();
+      renderPoll();
+      updateInboxBadge();
+    }
+
+    async function saveData() {
+      renderPosts();
+      renderPoll();
+      updateInboxBadge();
+      
+      try {
+        await fetch(BIN_URL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': BIN_KEY
+          },
+          body: JSON.stringify({
+            posts: state.posts,
+            inbox: state.inbox,
+            poll: state.poll
+          })
+        });
+      } catch (e) {
+        console.error('שגיאה בשמירה בענן');
+      }
+    }
+
+    function renderPosts() {
+      const container = document.getElementById('postsContainer');
+      let filtered = state.posts;
+
+      if (state.currentCategory !== 'הכל') {
+        filtered = state.posts.filter(p => p.category === state.currentCategory);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<h3 style="text-align:center; padding: 40px; color: var(--text-muted);">אין פוסטים להצגה.</h3>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(post => `
+        <article class="post-card">
+          ${post.image ? `<img src="${post.image}" alt="תמונה">` : ''}
+          <div class="post-content">
+            <span class="post-badge">${post.category}</span>
+            <h2 class="post-title">${post.title}</h2>
+            <p class="post-text">${post.content}</p>
+            <div class="post-footer">
+              <span style="font-size:0.8rem; color:var(--text-muted);">${post.date}</span>
+              ${state.isAdmin ? `<button class="delete-btn-footer" onclick="deletePost(${post.id})">מחק פוסט</button>` : ''}
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function filterCategory(cat) {
+      state.currentCategory = cat;
+      document.querySelectorAll('.cat-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(cat));
+      });
+      renderPosts();
+    }
+
+    function renderPoll() {
+      const poll = state.poll;
+      document.getElementById('pollQuestionDisplay').textContent = poll.question;
+      const totalVotes = poll.options.reduce((sum, opt) => sum + opt.votes, 0);
+
+      const container = document.getElementById('pollOptionsContainer');
+      container.innerHTML = poll.options.map((opt, idx) => {
+        const pct = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
+        return `
+          <div class="poll-option" onclick="votePoll(${idx})">
+            <div class="poll-bar" style="width: ${pct}%"></div>
+            <div class="poll-text">
+              <span>${opt.text}</span>
+              <span>${pct}% (${opt.votes})</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function votePoll(idx) {
+      if (state.poll.voted) {
+        alert("כבר הצבעת בסקר השבועי!");
+        return;
+      }
+      state.poll.options[idx].votes++;
+      state.poll.voted = true;
+      await saveData();
+      alert("ההצבעה נקלטה בהצלחה!");
+    }
+
+    async function submitAnonLetter(e) {
+      e.preventDefault();
+      const topic = document.getElementById('anonTopic').value.trim();
+      const msg = document.getElementById('anonMessage').value.trim();
+      state.inbox.push({ id: Date.now(), date: new Date().toLocaleDateString('he-IL'), topic, message: msg });
+      await saveData();
+      alert('המכתב נשלח בהצלחה למועצה!');
+      e.target.reset();
+    }
+
+    function handleAdminClick() {
+      if (state.isAdmin) openModal('adminPanelModal');
+      else openModal('loginModal');
+    }
+
+    function verifyPassword() {
+      const pass = document.getElementById('adminPasswordInput').value;
+      if (pass === '1234') {
+        state.isAdmin = true;
+        closeModal('loginModal');
+        document.getElementById('adminBtnText').textContent = 'פאנל מועצה';
+        openModal('adminPanelModal');
+        renderPosts();
+        renderInbox();
+      } else alert('סיסמה שגויה!');
+    }
+
+    async function createPost(e) {
+      e.preventDefault();
+      const title = document.getElementById('newTitle').value.trim();
+      const category = document.getElementById('newCategory').value;
+      const image = document.getElementById('newImg').value.trim();
+      const content = document.getElementById('newContent').value.trim();
+
+      const newPost = {
+        id: Date.now(),
+        title,
+        category,
+        image: image || null,
+        content,
+        date: new Date().toLocaleDateString('he-IL')
+      };
+
+      state.posts.unshift(newPost);
+      await saveData();
+      closeModal('adminPanelModal');
+      e.target.reset();
+      alert('הפוסט פורסם בהצלחה וזמין כעת לכל התלמידים!');
+    }
+
+    async function deletePost(id) {
+      if (confirm('למחוק פוסט זה?')) {
+        state.posts = state.posts.filter(p => p.id !== id);
+        await saveData();
+      }
+    }
+
+    function updateInboxBadge() {
+      document.getElementById('inboxCount').textContent = state.inbox.length;
+    }
+
+    function switchAdminTab(tabName) {
+      document.getElementById('tabNewPost').style.display = tabName === 'newPost' ? 'block' : 'none';
+      document.getElementById('tabInbox').style.display = tabName === 'inbox' ? 'block' : 'none';
+      document.getElementById('tabEditPoll').style.display = tabName === 'editPoll' ? 'block' : 'none';
+
+      document.getElementById('tabBtnPost').classList.toggle('active', tabName === 'newPost');
+      document.getElementById('tabBtnInbox').classList.toggle('active', tabName === 'inbox');
+      document.getElementById('tabBtnPoll').classList.toggle('active', tabName === 'editPoll');
+
+      if (tabName === 'inbox') renderInbox();
+    }
+
+    function renderInbox() {
+      const container = document.getElementById('inboxList');
+      if (state.inbox.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); text-align: center;">אין מכתבים חדשים בתיבה.</p>';
+        return;
+      }
+
+      container.innerHTML = state.inbox.map(item => `
+        <div class="inbox-card">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">${item.date} | נושא: <strong>${item.topic}</strong></div>
+          <div class="inbox-msg">"${item.message}"</div>
+          <div class="reply-area">
+            <textarea id="reply-${item.id}" placeholder="כתוב תשובה שתפורסם כפוסט בבלוג..."></textarea>
+            <button class="reply-btn" onclick="publishReply(${item.id})">פרסם תשובה</button>
+          </div>
+          <div style="clear: both;"></div>
+        </div>
+      `).join('');
+    }
+
+    async function publishReply(inboxId) {
+      const item = state.inbox.find(i => i.id === inboxId);
+      const replyText = document.getElementById(`reply-${inboxId}`).value.trim();
+
+      if (!replyText) {
+        alert('יש לכתוב תשובה לפני הפרסום.');
+        return;
+      }
+
+      const newPost = {
+        id: Date.now(),
+        title: `מענה למכתב: ${item.topic}`,
+        category: 'מכתבים ותשובות',
+        image: null,
+        content: `❓ **שאלה אנונימית:**\n"${item.message}"\n\n💬 **תשובת המועצה:**\n${replyText}`,
+        date: new Date().toLocaleDateString('he-IL')
+      };
+
+      state.posts.unshift(newPost);
+      state.inbox = state.inbox.filter(i => i.id !== inboxId);
+      await saveData();
+      renderInbox();
+      alert('התשובה פורסמה בהצלחה!');
+    }
+
+    async function savePollConfig(e) {
+      e.preventDefault();
+      const q = document.getElementById('pollQuestionInput').value.trim();
+      const o1 = document.getElementById('pollOpt1').value.trim();
+      const o2 = document.getElementById('pollOpt2').value.trim();
+      const o3 = document.getElementById('pollOpt3').value.trim();
+
+      let newOptions = [
+        { text: o1, votes: 0 },
+        { text: o2, votes: 0 }
+      ];
+      if (o3) newOptions.push({ text: o3, votes: 0 });
+
+      state.poll = { question: q, options: newOptions, voted: false };
+      await saveData();
+      closeModal('adminPanelModal');
+      alert('הסקר עודכן בהצלחה!');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    // טעינת נתונים אוטומטית ברגע שהדף נפתח
+    window.onload = loadData;
+  </script>
+</body>
+</html>
